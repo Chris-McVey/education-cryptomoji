@@ -54,7 +54,11 @@ const getPublicKey = privateKey => {
  *   not the message itself!
  */
 const sign = (privateKey, message) => {
-  // Your code here
+  message = createHash('sha256').update(message).digest('hex');
+  let messageBuffer = Buffer.from(message, 'hex');
+  let privateKeyBuffer = Buffer.from(privateKey, 'hex');
+  const sigObj = secp256k1.sign(messageBuffer, privateKeyBuffer);
+  return sigObj.signature.toString('hex');
 
 };
 
@@ -69,7 +73,8 @@ const sign = (privateKey, message) => {
  *   // false
  */
 const verify = (publicKey, message, signature) => {
-  // Your code here
+  console.log(secp256k1.ecdsaVerify(signature.signature, message, publicKey))
+  return secp256k1.ecdsaVerify(signature, message, publicKey);
 
 };
 
